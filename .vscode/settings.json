@@ -1,0 +1,5 @@
+{
+    "solidity.defaultCompiler": "embedded",
+    "solidity.formatter": "none",
+    "solidity.validationDelay": 200
+}

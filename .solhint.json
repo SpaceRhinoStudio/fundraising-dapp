@@ -1,0 +1,10 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "max-states-count": ["warn",16],
+    "not-rely-on-time": "off",
+    "reason-string": "off",
+    "compiler-version": ["error", "^0.8.0"],
+    "func-visibility": ["warn", { "ignoreConstructors": true }]
+  }
+}
