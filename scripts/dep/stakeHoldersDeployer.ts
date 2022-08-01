@@ -15,9 +15,7 @@ export async function deployStakeHolders(users: string[], shares: number[]) {
 
     console.log("stakeHolder local users deploying...")
     let StakeHoldersFactory = await ethers.getContractFactory("PaymentSplitter")
-    let stakeHolders: PaymentSplitter
-
-    stakeHolders = await StakeHoldersFactory.deploy(
+    let stakeHolders: PaymentSplitter = await StakeHoldersFactory.deploy(
         users,
         shares
     )
