@@ -1,8 +1,8 @@
 import { ethers } from "hardhat";
-import { owner4, owner3, owner2, owner1 } from "../constants";
 import { toEth } from "../utilities";
 import { isNetworkDeployable } from "./_common";
 import hre from "hardhat"
+import { OWNER_ADDRS } from "../constants";
 
 export async function deploy() {
     let networkName = hre.network.name
@@ -13,7 +13,7 @@ export async function deploy() {
 
     let tokenName = "MOCK_ENGA_USD"
     let tokenSymbol = "EL-USD"
-    let initialAccount = owner2
+    let initialAccount = OWNER_ADDRS[0]
     let tokenBalance = toEth(10_000_000_000)
 
     console.log("Deployment of Mock DAI token is started...")
@@ -31,11 +31,11 @@ export async function deploy() {
     console.log("Contract deployed at: " + deployedAddr)
 
     console.log("sending funds to owner1...")
-    await usdMock.transferInternal(owner2, owner1, tokenBalance.div(4))
+    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[1], tokenBalance.div(4))
     console.log("sending funds to owner3...")
-    await usdMock.transferInternal(owner2, owner3, tokenBalance.div(4))
+    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[2], tokenBalance.div(4))
     console.log("sending funds to owner4...")
-    await usdMock.transferInternal(owner2, owner4, tokenBalance.div(4))
+    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[3], tokenBalance.div(4))
 
     try {
         console.log("waiting for verification...")

@@ -10,13 +10,18 @@ export const COLLATERALS = {
     polygonMumbai: '0xA596B5Ad2DfB31f376EB5327ccFb296B5152135c' // MOCK_USD
 }
 
-export const owner1 = process.env.OWNER1!
-export const owner2 = process.env.OWNER2!
-export const owner3 = process.env.OWNER3!
-export const owner4 = process.env.OWNER4!
+const owner1 = process.env.OWNER1!
+const owner2 = process.env.OWNER2!
+const owner3 = process.env.OWNER3!
+const owner4 = process.env.OWNER4!
+
+const owner1Share = Number(process.env.OWNER1_SHARE!)
+const owner2Share = Number(process.env.OWNER2_SHARE!)
+const owner3Share = Number(process.env.OWNER3_SHARE!)
+const owner4Share = Number(process.env.OWNER4_SHARE!)
 
 export const OWNER_ADDRS = [owner1, owner2, owner3, owner4]
-export const OWNER_SHARES = [50, 20, 15, 15]
+export const OWNER_SHARES = [owner1Share, owner2Share, owner3Share, owner4Share]
 
 export const seconds = 1
 export const minutes = 60 * seconds
