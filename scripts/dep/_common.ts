@@ -1,6 +1,5 @@
 import { BaseContract, BigNumberish, Signer } from "ethers";
 import { FormatTypes } from "ethers/lib/utils";
-import { owner4, owner3, owner2, owner1 } from "../constants";
 import { saveContractAbi, saveContractAddress } from "../fileUtils";
 import { awaitTx, isDeployed } from "../utilities";
 import hre, { ethers } from "hardhat"
