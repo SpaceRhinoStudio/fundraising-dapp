@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { toEth } from "../utilities";
 import { isNetworkDeployable } from "./_common";
 import hre from "hardhat"
-import { OWNER_ADDRS } from "../constants";
+import { OWNER_ADDRSS } from "../constants";
 
 export async function deploy() {
     let networkName = hre.network.name
@@ -30,9 +30,9 @@ export async function deploy() {
 
     console.log("Contract deployed at: " + deployedAddr)
 
-    OWNER_ADDRS.forEach(async (owner) => {
+    OWNER_ADDRSS.forEach(async (owner) => {
         console.log(`sending funds to ${owner}`)
-        let tx = await usdMock.transfer(owner, tokenBalance.div(OWNER_ADDRS.length))
+        let tx = await usdMock.transfer(owner, tokenBalance.div(OWNER_ADDRSS.length))
         await tx.wait(1)
     });
 

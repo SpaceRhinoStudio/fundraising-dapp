@@ -1,4 +1,4 @@
-import { preSaleConfig, seedSaleConfig, OWNER_ADDRS, OWNER_SHARES, COLLATERALS } from "../constants";
+import { preSaleConfig, seedSaleConfig, OWNER_ADDRSS, OWNER_SHARES, COLLATERALS } from "../constants";
 import { getSavedContractAddresses } from "../fileUtils";
 import hre from "hardhat"
 
@@ -11,7 +11,7 @@ async function verifyMultisig() {
     await hre.run("verify:verify", {
         address: contracts['CoreMultisig'].address,
         constructorArguments: [
-            OWNER_ADDRS,
+            OWNER_ADDRSS,
         ],
     });
 }
@@ -61,7 +61,7 @@ async function verifyStakeHolders() {
     await hre.run("verify:verify", {
         address: contracts['StakeHolders'].address,
         constructorArguments: [
-            OWNER_ADDRS,
+            OWNER_ADDRSS,
             OWNER_SHARES
         ],
     });

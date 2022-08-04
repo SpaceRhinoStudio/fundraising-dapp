@@ -1,4 +1,4 @@
-import { OWNER_ADDRS } from "../constants";
+import { OWNER_ADDRSS } from "../constants";
 import { getSavedContractAddresses } from "../fileUtils";
 import { deployMultisig } from "./multisigDeployer";
 import { canCoreMultisigBeDeployed, isNetworkDeployable } from "./_common";
@@ -13,7 +13,7 @@ export async function deploy() {
     if (await canCoreMultisigBeDeployed(contracts, networkName) === false) return
 
     // multisig
-    let multisig = await deployMultisig(OWNER_ADDRS)
+    let multisig = await deployMultisig(OWNER_ADDRSS)
 }
 
 deploy().catch(error => {

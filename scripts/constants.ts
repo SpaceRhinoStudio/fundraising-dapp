@@ -10,7 +10,7 @@ export const COLLATERALS = {
     polygonMumbai: '0xA596B5Ad2DfB31f376EB5327ccFb296B5152135c' // MOCK_USD
 }
 
-export const OWNER_ADDRS = process.env.OWNERS!.split(' ')
+export const OWNER_ADDRSS = process.env.OWNERS!.split(' ')
 export const OWNER_SHARES = process.env.SHARES!.split(' ').map(share => Number(share))
 
 export const seconds = 1
