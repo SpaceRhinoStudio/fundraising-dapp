@@ -13,7 +13,7 @@ export async function deploy() {
 
     let tokenName = "MOCK_ENGA_USD"
     let tokenSymbol = "EL-USD"
-    let initialAccount = OWNER_ADDRS[0]
+    let initialAccount = await signer.getAddress()
     let tokenBalance = toEth(10_000_000_000)
 
     console.log("Deployment of Mock DAI token is started...")
@@ -30,12 +30,11 @@ export async function deploy() {
 
     console.log("Contract deployed at: " + deployedAddr)
 
-    console.log("sending funds to owner1...")
-    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[1], tokenBalance.div(4))
-    console.log("sending funds to owner3...")
-    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[2], tokenBalance.div(4))
-    console.log("sending funds to owner4...")
-    await usdMock.transferInternal(OWNER_ADDRS[0], OWNER_ADDRS[3], tokenBalance.div(4))
+    OWNER_ADDRS.forEach(async (owner) => {
+        console.log(`sending funds to ${owner}`)
+        let tx = await usdMock.transfer(owner, tokenBalance.div(OWNER_ADDRS.length))
+        await tx.wait(1)
+    });
 
     try {
         console.log("waiting for verification...")
@@ -50,7 +49,7 @@ export async function deploy() {
         });
         console.log("verification is done!")
     } catch (error) {
-        console.log("verification failed!")
+        console.log("*************verification failed!*************")
         console.log(error)
     }
 }
