@@ -5,9 +5,10 @@ import { describe } from "mocha"
 import { ERC20Mock, MockAccessControl, CoreMultisig } from "../../typechain"
 import { awaitTx, encodeParams, isEthException, toEth } from "../../scripts/utilities"
 import { CHANGE_DAILY_LIMIT_ROLE, TRANSFER_ROLE } from "../../scripts/offChainKeccakRoles"
-import { BENEFICIARY_DAILY_LIMIT } from "../../scripts/constants"
 import { deployMultisig } from "../../scripts/dep/multisigDeployer"
 import hre from "hardhat"
+
+const BENEFICIARY_DAILY_LIMIT = toEth(500)
 
 let usdToken: ERC20Mock
 

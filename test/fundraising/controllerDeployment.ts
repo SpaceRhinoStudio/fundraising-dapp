@@ -2,8 +2,8 @@ import { expect } from "chai"
 import { ethers } from "hardhat"
 import { BYTES32_ZERO, TEMP } from "../../scripts/offChainKeccakRoles"
 import { deployPreSale } from "../../scripts/dep/preSaleDeployer"
-import { awaitTx, isEthException, toEth } from "../../scripts/utilities"
-import { BATCH_BLOCKS, ControllerState, marketMakerConfig, OWNER_SHARES, tapConfig } from "../../scripts/constants"
+import { awaitTx, calculateSyntheticShare, isEthException, toEth } from "../../scripts/utilities"
+import { BATCH_BLOCKS, ControllerState, marketMakerConfig, tapConfig } from "../../scripts/constants"
 import { deployMultisig } from "../../scripts/dep/multisigDeployer"
 import { deploySeedSale } from "../../scripts/dep/seedSaleDeployer"
 import { deployStakeHolders } from "../../scripts/dep/stakeHoldersDeployer"
@@ -19,7 +19,8 @@ describe("controller deployment check", async () => {
 
         let multisig = await deployMultisig([d.owner2Addr, d.owner1Addr, d.owner3Addr, d.owner4Addr, d.owner5Addr])
         let seedSale = await deploySeedSale(multisig.address)
-        let stakeHolders = await deployStakeHolders([d.owner1Addr, d.owner2Addr, d.owner3Addr, d.owner4Addr], OWNER_SHARES)
+
+        let stakeHolders = await deployStakeHolders([d.owner1Addr, d.owner2Addr, d.owner3Addr, d.owner4Addr], calculateSyntheticShare(4))
 
         const DEFAULT_ADMIN_ROLE = BYTES32_ZERO
         const ZERO_ADDRESS = ethers.constants.AddressZero

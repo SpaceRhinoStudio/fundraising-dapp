@@ -2,12 +2,11 @@ import { Signer } from "ethers"
 import { ethers } from "hardhat"
 
 import { BancorFormula, Controller, EngaToken, ERC20Mock, KycAuthorization, MarketMaker, CoreMultisig, PreSale, Vault, PaymentSplitter, Tap, TokenManager, SeedSale } from "../../typechain"
-import { toEth } from "../utilities"
+import { calculateSyntheticShare, toEth } from "../utilities"
 import { deployMultisig } from "./multisigDeployer"
 import { deployFundraising } from "./fundraisingDeployer"
 import { deploySeedSale } from "./seedSaleDeployer"
 import { deployStakeHolders } from "./stakeHoldersDeployer"
-import { OWNER_SHARES } from "../constants"
 
 export const MAX_UINT256 = ethers.constants.MaxUint256
 export let usdToken: ERC20Mock
@@ -58,7 +57,7 @@ export async function deployContractsForTest() {
 
     multisig = await deployMultisig([owner2Addr, owner1Addr, owner3Addr, owner4Addr, owner5Addr])
     seedSale = await deploySeedSale(multisig.address)
-    stakeHolders = await deployStakeHolders([owner1Addr, owner2Addr, owner3Addr, owner4Addr], OWNER_SHARES)
+    stakeHolders = await deployStakeHolders([owner1Addr, owner2Addr, owner3Addr, owner4Addr], calculateSyntheticShare(4))
 
     let result = await deployFundraising(multisig.address, stakeHolders.address, seedSale.address, usdToken.address)
     controller = result.controller

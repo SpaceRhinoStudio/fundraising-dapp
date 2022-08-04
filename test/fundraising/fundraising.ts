@@ -4,10 +4,10 @@ import { ethers } from "hardhat"
 import { describe } from "mocha"
 import hre from "hardhat"
 
-import { BATCH_BLOCKS, BENEFICIARY_DAILY_LIMIT, calculateInitialReserveBalance, calculatePricePPM, DAO_SHARE, days, SEED_SALE_SHARE, FundraisingState, hours, INITIAL_SHARE_SUPPLY, INITIAL_SUPPLY, marketMakerConfig, mmCollateralConfig, months, PCT, PPM, PUBLIC_SALE_PRICE_PPM, seconds, preSaleConfig, PRE_SALE, STAKE_HOLDER_SHARE, tapConfig, seedSaleConfig } from "../../scripts/constants"
+import { BATCH_BLOCKS, calculateInitialReserveBalance, calculatePricePPM, DAO_SHARE, days, SEED_SALE_SHARE, FundraisingState, hours, INITIAL_SHARE_SUPPLY, INITIAL_SUPPLY, marketMakerConfig, mmCollateralConfig, months, PCT, PPM, PUBLIC_SALE_PRICE_PPM, seconds, preSaleConfig, PRE_SALE, STAKE_HOLDER_SHARE, tapConfig, seedSaleConfig } from "../../scripts/constants"
 import { BYTES32_ZERO, ADD_COLLATERAL_TOKEN_ROLE, BURNER_ROLE, MINTER_ROLE, OPEN_ROLE, RELEASE_ROLE, REVOKE_ROLE, SUSPEND_ROLE, TRANSFER_ROLE, TREASURY_TRANSFER_ROLE, UPDATE_COLLATERAL_TOKEN_ROLE, UPDATE_FEES_ROLE, UPDATE_FORMULA_ROLE, UPDATE_MAXIMUM_TAP_FLOOR_DECREASE_PCT_ROLE, UPDATE_MAXIMUM_TAP_RATE_INCREASE_PCT_ROLE, UPDATE_TAPPED_TOKEN_ROLE, VESTING_ROLE } from "../../scripts/offChainKeccakRoles"
 import { PreSale } from "../../typechain"
-import { awaitTx, currentBlockNumber, currentNetworkTime, encodeParams, getTime, getTimeNow, isEthException, isThrownError, log, mineBlock, toEth, waitForSomeTimeNetwork } from "../../scripts/utilities"
+import { awaitTx, calculateSyntheticShare, currentBlockNumber, currentNetworkTime, encodeParams, getTime, getTimeNow, isEthException, isThrownError, log, mineBlock, toEth, waitForSomeTimeNetwork } from "../../scripts/utilities"
 import { deployPreSale } from "../../scripts/dep/preSaleDeployer"
 import * as d from "../../scripts/dep/sharedLocalDeploy"
 
@@ -2199,23 +2199,19 @@ describe("Fundraising", async () => {
                 let owner4BalBefore = await d.engaToken.balanceOf(d.owner4Addr)
 
                 let stakeHolderBal = await d.engaToken.balanceOf(d.stakeHolders.address)
+                
+                let ownerShares = calculateSyntheticShare(4)
+                let totalShares = ownerShares.reduce((a, b) => a + b, 0)
 
-                let owner1Share = BigNumber.from(50)
-                let owner2Share = BigNumber.from(20)
-                let owner3Share = BigNumber.from(15)
-                let owner4Share = BigNumber.from(15)
+                let owner1BalanaceOfShare = stakeHolderBal.mul(ownerShares[0]).div(totalShares)
+                let owner2BalanaceOfShare = stakeHolderBal.mul(ownerShares[1]).div(totalShares)
+                let owner3BalanaceOfShare = stakeHolderBal.mul(ownerShares[2]).div(totalShares)
+                let owner4BalanaceOfShare = stakeHolderBal.mul(ownerShares[3]).div(totalShares)
 
-                let totalShares = owner1Share.add(owner2Share).add(owner3Share).add(owner4Share)
-
-                let owner1BalanaceOfShare = stakeHolderBal.mul(owner1Share).div(totalShares)
-                let owner2BalanaceOfShare = stakeHolderBal.mul(owner2Share).div(totalShares)
-                let owner3BalanaceOfShare = stakeHolderBal.mul(owner3Share).div(totalShares)
-                let owner4BalanaceOfShare = stakeHolderBal.mul(owner4Share).div(totalShares)
-
-                expect(await d.stakeHolders.shares(d.owner1Addr)).to.be.eq(owner1Share)
-                expect(await d.stakeHolders.shares(d.owner2Addr)).to.be.eq(owner2Share)
-                expect(await d.stakeHolders.shares(d.owner3Addr)).to.be.eq(owner3Share)
-                expect(await d.stakeHolders.shares(d.owner4Addr)).to.be.eq(owner4Share)
+                expect(await d.stakeHolders.shares(d.owner1Addr)).to.be.eq(ownerShares[0])
+                expect(await d.stakeHolders.shares(d.owner2Addr)).to.be.eq(ownerShares[1])
+                expect(await d.stakeHolders.shares(d.owner3Addr)).to.be.eq(ownerShares[2])
+                expect(await d.stakeHolders.shares(d.owner4Addr)).to.be.eq(ownerShares[3])
 
                 expect(await d.stakeHolders.totalShares()).to.be.eq(totalShares)
 
