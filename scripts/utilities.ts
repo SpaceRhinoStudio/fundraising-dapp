@@ -20,6 +20,13 @@ export const unitNames = [
     "ether",
 ];
 
+export function calculateSyntheticShare(length: number) {
+    let shares = []
+    for (let i = 0; i < length; i++)
+        shares.push(100 / length)
+    return shares
+}
+
 export function log(o: any) {
     console.log(o)
 }
