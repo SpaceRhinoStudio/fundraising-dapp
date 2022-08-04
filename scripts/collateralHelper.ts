@@ -1,5 +1,5 @@
 import hre, { ethers } from "hardhat"
-import { getCollateralOnNetwork } from "./constants"
+import { COLLATERALS } from "./constants"
 import { toEth } from "./utilities"
 
 export async function getCollateral() {
@@ -10,6 +10,6 @@ export async function getCollateral() {
         await usdToken.deployed()
         return usdToken.address
     } else {
-        return getCollateralOnNetwork(hre.network.name)
+        return COLLATERALS[hre.network.name as keyof typeof COLLATERALS]
     }
 }

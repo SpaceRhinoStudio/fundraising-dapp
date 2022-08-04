@@ -1,11 +1,11 @@
-import { getCollateralOnNetwork, preSaleConfig, seedSaleConfig, OWNER_ADDRS, OWNER_SHARES } from "../constants";
+import { preSaleConfig, seedSaleConfig, OWNER_ADDRS, OWNER_SHARES, COLLATERALS } from "../constants";
 import { getSavedContractAddresses } from "../fileUtils";
 import hre from "hardhat"
 
 let allNetworkContracts = getSavedContractAddresses()
 let networkName = hre.network.name
 let contracts = allNetworkContracts[networkName]
-let collateral = getCollateralOnNetwork(networkName)
+let collateral = COLLATERALS[networkName as keyof typeof COLLATERALS]
 
 async function verifyMultisig() {
     await hre.run("verify:verify", {

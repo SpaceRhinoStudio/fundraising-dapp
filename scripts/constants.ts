@@ -129,25 +129,6 @@ export function calculatePrice(supply: BigNumber, balance: BigNumber, rrPPM: Big
     return Number(calculatePricePPM(supply, balance, rrPPM)) / Number(PPM)
 }
 
-export function getCollateralOnNetwork(network: string) {
-    if (network === 'rinkeby') {
-        return COLLATERALS.rinkeby
-    } else if (network === 'ropsten') {
-        return COLLATERALS.ropsten
-    } else if (network === 'bsc') {
-        return COLLATERALS.bsc
-    } else if (network === 'bscTestnet') {
-        return COLLATERALS.bscTestnet
-    } else if (network === 'polygon') {
-        return COLLATERALS.polygon
-    } else if (network === 'polygonMumbai') {
-        return COLLATERALS.polygonMumbai
-    } else {
-        console.error("Network address is not supported")
-        return ''
-    }
-}
-
 log("************")
 log("************")
 log("INITIAL_SUPPLY: " + formatEther(INITIAL_SUPPLY))
