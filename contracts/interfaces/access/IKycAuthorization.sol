@@ -14,5 +14,7 @@ interface IKycAuthorization {
     function disableKyc() external;
     function addKycUser(address _user) external;
     function removeKycUser(address _user) external;
+    function addKycUserBatch(address[] memory _user) external;
+    function removeKycUserBatch(address[] memory _user) external;
     function getKycOfUser(address _user) external view returns (bool isKyc);
 }

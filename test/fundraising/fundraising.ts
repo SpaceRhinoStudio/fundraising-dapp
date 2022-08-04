@@ -1697,7 +1697,7 @@ describe("Fundraising", async () => {
                 expect(await d.kyc.getKycOfUser(d.investor1Addr)).to.be.true
                 expect(await d.controller.getKycOfUser(d.investor1Addr)).to.be.true
 
-                expect(await addKycUser(d.investor1Addr)).to.be.false // re-adding fails
+                expect(await addKycUser(d.investor1Addr)).to.be.true // adding does nothing for the second time
             })
 
             it("should let new kyc user participate in sell or buy", async () => {
@@ -1723,7 +1723,7 @@ describe("Fundraising", async () => {
                 expect(await removeKycUser(d.investor1Addr)).to.be.true
                 expect(await d.kyc.getKycOfUser(d.investor1Addr)).to.be.false
 
-                expect(await removeKycUser(d.investor1Addr)).to.be.false // removing fails for the second time
+                expect(await removeKycUser(d.investor1Addr)).to.be.true // removing does nothing for the second time
             })
 
             it("should not let user who has been removed from kyc list buy or sell straight on market maker", async () => {
@@ -1731,6 +1731,26 @@ describe("Fundraising", async () => {
 
                 expect(await isEthException(d.controller.connect(d.investor1).openBuyOrder(collateral, toEth(1)))).to.be.true
                 expect(await isEthException(d.controller.connect(d.investor1).openSellOrder(collateral, toEth(1)))).to.be.true
+            })
+
+            it("should add/remove batched users", async () => {
+                let users = [d.investor1Addr, d.investor2Addr, d.investor3Addr]
+
+                users.forEach(async (user) => {
+                    expect(await d.kyc.getKycOfUser(user)).to.be.false
+                });
+
+                expect(await addKycUserBatch(users)).to.be.true
+
+                users.forEach(async (user) => {
+                    expect(await d.kyc.getKycOfUser(user)).to.be.true
+                });
+
+                expect(await removeKycUserBatch(users)).to.be.true
+
+                users.forEach(async (user) => {
+                    expect(await d.kyc.getKycOfUser(user)).to.be.false
+                });
             })
 
             it("should disable kyc mechanism", async () => {
@@ -2199,7 +2219,7 @@ describe("Fundraising", async () => {
                 let owner4BalBefore = await d.engaToken.balanceOf(d.owner4Addr)
 
                 let stakeHolderBal = await d.engaToken.balanceOf(d.stakeHolders.address)
-                
+
                 let ownerShares = calculateSyntheticShare(4)
                 let totalShares = ownerShares.reduce((a, b) => a + b, 0)
 
@@ -2727,10 +2747,18 @@ async function removeKycUser(userAddr: string) {
     return (await d.multisig.transactions(res.id)).executed
 }
 
-async function beneficiaryTransfer(token: string, to: string, amount: BigNumberish) {
+async function addKycUserBatch(userAddrs: string[]) {
     let target = d.controller.address
-    let sig = 'beneficiaryTransfer(address,address,uint256)'
-    let calldata = encodeParams(['address', 'address', 'uint256'], [token, to, amount])
+    let sig = 'addKycUserBatch(address[])'
+    let calldata = encodeParams(['address[]'], [userAddrs])
+    let res = await multisigCall(target, sig, calldata)
+    return (await d.multisig.transactions(res.id)).executed
+}
+
+async function removeKycUserBatch(userAddrs: string[]) {
+    let target = d.controller.address
+    let sig = 'removeKycUserBatch(address[])'
+    let calldata = encodeParams(['address[]'], [userAddrs])
     let res = await multisigCall(target, sig, calldata)
     return (await d.multisig.transactions(res.id)).executed
 }

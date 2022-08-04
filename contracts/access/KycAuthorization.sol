@@ -17,11 +17,9 @@ contract KycAuthorization is IKycAuthorization, EngalandBase {
     bool public isKycEnable;
     mapping(address => bool) public kycUsers;
 
-    string private constant ERROR_INVALID_USER_ADDRESS      = "KYC_INVALID_USER_ADDRESS";
     string private constant ERROR_KYC_IS_ALREADY_ENABLE     = "KYC_KYC_IS_ALREADY_ENABLE";
     string private constant ERROR_KYC_IS_ALREADY_DISABLE    = "KYC_KYC_IS_ALREADY_DISABLE";
     string private constant ERROR_USER_HAS_NOT_BEEN_KYC     = "KYC_USER_HAS_NOT_BEEN_KYC";
-    string private constant ERROR_USER_HAS_ALREADY_BEEN_KYC = "KYC_USER_HAS_ALREADY_BEEN_KYC";
 
     event EnableKyc(address indexed caller);
     event DisableKyc(address indexed caller);
@@ -51,19 +49,25 @@ contract KycAuthorization is IKycAuthorization, EngalandBase {
     }
 
     function addKycUser(address _user) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(kycUsers[_user] == false, ERROR_USER_HAS_ALREADY_BEEN_KYC);
-
-        kycUsers[_user] = true;
-
-        emit KycUserAdded(_user);
+        _addKycUser(_user);
     }
 
     function removeKycUser(address _user) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(kycUsers[_user] == true, ERROR_USER_HAS_NOT_BEEN_KYC);
+        _removeKycUser(_user);
+    }
 
-        kycUsers[_user] = false;
+    function addKycUserBatch(address[] memory _user) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_user.length > 0);
 
-        emit KycUserRemoved(_user);
+        for (uint256 i = 0; i < _user.length; i++)
+            _addKycUser(_user[i]);
+    }
+
+    function removeKycUserBatch(address[] memory _user) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_user.length > 0);
+
+        for (uint256 i = 0; i < _user.length; i++)
+            _removeKycUser(_user[i]);
     }
 
     /* MODIFIERS */
@@ -84,6 +88,22 @@ contract KycAuthorization is IKycAuthorization, EngalandBase {
             isKyc = kycUsers[_user];
         } else {
             isKyc = true;
+        }
+    }
+
+    /* INTERNALS */
+    
+    function _addKycUser(address _user) internal {
+        if (kycUsers[_user] == false) {
+            kycUsers[_user] = true;
+            emit KycUserAdded(_user);
+        }
+    }
+
+    function _removeKycUser(address _user) internal {
+        if (kycUsers[_user] == true) {
+            kycUsers[_user] = false;
+            emit KycUserRemoved(_user);
         }
     }
 }

@@ -298,6 +298,14 @@ contract Controller is IController, EngalandAccessControl {
     function removeKycUser(address _user) external onlyMultisig onlyOpenProtocol {
         IKycAuthorization(kyc).removeKycUser(_user);
     }
+
+    function addKycUserBatch(address[] memory _users) external onlyMultisig onlyOpenProtocol {
+        IKycAuthorization(kyc).addKycUserBatch(_users);
+    }
+    
+    function removeKycUserBatch(address[] memory _users) external onlyMultisig onlyOpenProtocol {
+        IKycAuthorization(kyc).removeKycUserBatch(_users);
+    }
     
     function getKycOfUser(address _user) external view returns (bool) {
         return IKycAuthorization(kyc).getKycOfUser(_user);
