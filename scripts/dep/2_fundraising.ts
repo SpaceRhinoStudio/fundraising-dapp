@@ -1,14 +1,14 @@
 import { getSavedContractAddresses } from "../fileUtils";
-import { getCollateral } from "../collateralHelper";
 import { deployFundraising } from "./fundraisingDeployer";
 import { isGnosisSafeDeployed, isNetworkDeployable, isNetworkRegistered, isSeedSaleDeployed, isStakeHoldersDeployed } from "./_common";
+import { COLLATERALS } from "../constants";
 import hre from "hardhat"
 
 export async function deploy() {
     let contracts = getSavedContractAddresses()
     let networkName = hre.network.name
     let networkContracts = contracts[networkName]
-    let collateral = await getCollateral()
+    let collateral = COLLATERALS[hre.network.name as keyof typeof COLLATERALS]
 
     if (isNetworkDeployable(networkName) === false) return
     if (isNetworkRegistered(contracts, networkName) === false) return
