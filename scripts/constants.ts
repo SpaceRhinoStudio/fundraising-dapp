@@ -112,7 +112,7 @@ const VIRTUAL_SUPPLY = toEth(10_000_000) // 10M + 5M = 15M
 const RESERVE_RATIO_PPM = BigNumber.from(333333)
 //const RESERVE_RATIO_PPM = BigNumber.from(777777)
 const VIRTUAL_BALANCE = calculateVirtualBalance(PUBLIC_SALE_PRICE_PPM, VIRTUAL_SUPPLY, RESERVE_RATIO_PPM)
-const SLIIPPAGE_PCT = toEth(0.25) // 1 PCT = 1 * 10 ** 18, 0.25 * 10 ** 18 = 25 * 10 ** 16
+const SLIIPPAGE_PCT = toEth(0.1) // 1 PCT = 1 * 10 ** 18, if 1 == 100% then 0.1 == 10%, 0.1 * 10 ** 18 = 1 * 10 ** 17
 
 export const mmCollateralConfig = {
     virtualSupply: VIRTUAL_SUPPLY,
