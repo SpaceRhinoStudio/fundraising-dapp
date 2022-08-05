@@ -138,6 +138,18 @@ export async function deployFundraising(owner: string, stakeHolder: string, seed
     assert.equal(await controller.hasRole(TEMP, signerAddr), false, "error: user shouldn't have role TEMP")
     console.log("[WELL DONE] assertioning")
 
+    console.log("initializing SeedSale...")
+    let seedSaleContract = await ethers.getContractAt("SeedSale", seedSale)
+    await awaitTx(seedSaleContract.initializeAddresses(controller.address, collateral))
+    console.log("SeedSale has been initialized")
+
+    console.log("assertioning SeedSale passed addresses...")
+    assert.equal(await seedSaleContract.spaceRhinoBeneficiary(), owner)
+    assert.equal(await seedSaleContract.controller(), controller.address)
+    assert.equal(await seedSaleContract.engaToken(), engaToken.address)
+    assert.equal(await seedSaleContract.contributionToken(), collateral)
+    console.log("[WELL DONE] assertioning")
+
     console.log("FUNDRAISING DEPLOYMENT ENDED")
     console.log("****************")
     console.log("    ********    ")

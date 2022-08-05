@@ -13,6 +13,7 @@ import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
+import { IController } from "../interfaces/fundraising/IController.sol";
 import { SaleState } from "../interfaces/fundraising/IPreSale.sol";
 import { TimeHelper } from "../common/TimeHelper.sol";
 import { Utils } from "../lib/Utils.sol";
@@ -32,6 +33,7 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
     string private constant ERROR_INVALID_CONTRACT               = "ERROR_INVALID_CONTRACT";
     string private constant ERROR_INVALID_INDEX                  = "ERROR_INVALID_INDEX";
     string private constant ERROR_INVALID_TIME_PERIOD            = "ERROR_INVALID_TIME_PERIOD";
+    string private constant ERROR_NOT_KYC                        = "ERROR_NOT_KYC";
     string private constant ERROR_INVALID_GOAL                   = "ERROR_INVALID_GOAL";
     string private constant ERROR_INVALID_MINIMUM_REQUIRED_TOKEN = "ERROR_INVALID_MINIMUM_REQUIRED_TOKEN";
     string private constant ERROR_INVALID_CONTRIBUTE_VALUE       = "ERROR_INVALID_CONTRIBUTE_VALUE";
@@ -55,6 +57,7 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
     address public contributionToken;
     address public engaToken;
     address public spaceRhinoBeneficiary;
+    IController public controller;
 
     uint256 public daiGoal;
     uint256 public engaGoal;
@@ -117,16 +120,19 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
 
     /**
     * @notice set initilizing addresses of other contracts
+    * @param _controller                The address of the controller contract
     * @param _contributionToken         The address of the contributionToken contract (dai)
-    * @param _engaToken                 The address of the engaToken contract
     */
-    function initializeAddresses(address _contributionToken, address _engaToken) external onlyRole(OPEN_ROLE) {
-        Utils.enforceHasContractCode(_contributionToken, ERROR_INVALID_CONTRACT);
-        Utils.enforceHasContractCode(_engaToken, ERROR_INVALID_CONTRACT);
+    function initializeAddresses(address _controller, address _contributionToken) external onlyRole(OPEN_ROLE) {
         require(isOpen == false);
+        require(address(controller) == address(0));
+        require(engaToken == address(0));
+        Utils.enforceHasContractCode(_contributionToken, ERROR_INVALID_CONTRACT);
+        Utils.enforceHasContractCode(_controller, ERROR_INVALID_CONTRACT);
         
+        controller = IController(_controller);
+        engaToken = controller.engaToken();
         contributionToken = _contributionToken;
-        engaToken = _engaToken;
     }
 
     /**
@@ -136,6 +142,7 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
         require(isOpen == false);
         Utils.enforceValidAddress(contributionToken, ERROR_CONTRACT_IS_ZERO);
         Utils.enforceValidAddress(engaToken, ERROR_CONTRACT_IS_ZERO);
+        Utils.enforceValidAddress(address(controller), ERROR_CONTRACT_IS_ZERO);
         require(IERC20(engaToken).balanceOf(address(this)) >= engaGoal, ERROR_INSUFFICIENT_BALANCE);
         
         isOpen = true;
@@ -147,6 +154,7 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
     * @param _value       The amount of contribution token to be spent
     */
     function contribute(uint256 _value) external nonReentrant onlyOpen {
+        require(controller.getKycOfUser(_msgSender()), ERROR_NOT_KYC);
         require(_value >= minimumRequiredToken, ERROR_INVALID_CONTRIBUTE_VALUE);
         require(totalRaised < daiGoal);
 

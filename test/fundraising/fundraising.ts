@@ -735,6 +735,12 @@ describe("Fundraising", async () => {
                 expect(tapped).to.be.eq(0)
             })
 
+            it("should have price at 0.25", async () => {
+                expect(await d.reserve.balanceERC20(d.usdToken.address)).to.be.eq(calculateInitialReserveBalance())
+                expect(await dynamicPricePPM()).to.be.eq(PUBLIC_SALE_PRICE_PPM)
+                expect(await dynamicPricePPM()).to.be.eq(await d.marketMaker.getDynamicPricePPM(d.usdToken.address))
+            })
+
             it("should let some value equal to tap be withdrawn", async () => {
                 let blockCount = await currentBlock()
 
@@ -1207,17 +1213,13 @@ describe("Fundraising", async () => {
                 expect(await d.marketMaker.isOpen()).to.be.true
             })
 
-            it("should reserve at initial state for 0.25 price per token", async () => {
+            it("should reserve at initial state of the presale", async () => {
                 let collateralToBeAdded = calculateInitialReserveBalance().sub(await d.reserve.balanceERC20(d.usdToken.address))
                 if (collateralToBeAdded.gt(0)) {
                     await awaitTx(d.usdToken.approveInternal(d.investor1Addr, d.reserve.address, collateralToBeAdded))
                     await awaitTx(d.reserve.connect(d.investor1).depositERC20(d.usdToken.address, collateralToBeAdded))
                 }
-
                 expect(await d.reserve.balanceERC20(d.usdToken.address)).to.be.eq(calculateInitialReserveBalance())
-
-                expect(await dynamicPricePPM()).to.be.eq(PUBLIC_SALE_PRICE_PPM)
-                expect(await dynamicPricePPM()).to.be.eq(await d.marketMaker.getDynamicPricePPM(d.usdToken.address))
             })
 
             it("should allow only controller to call updateBancorFormula ", async () => {
@@ -2301,9 +2303,10 @@ describe("Fundraising", async () => {
 
         it("should check for the addresses", async () => {
             let zero = ethers.constants.AddressZero
+            expect(await d.seedSale.controller()).to.be.eq(d.controller.address)
             expect(await d.seedSale.spaceRhinoBeneficiary()).to.be.eq(d.multisig.address)
-            expect(await d.seedSale.contributionToken()).to.be.eq(zero)
-            expect(await d.seedSale.engaToken()).to.be.eq(zero)
+            expect(await d.seedSale.contributionToken()).to.be.eq(d.usdToken.address)
+            expect(await d.seedSale.engaToken()).to.be.eq(d.engaToken.address)
         })
 
         it("should check for the roles", async () => {
@@ -2311,19 +2314,6 @@ describe("Fundraising", async () => {
             expect(await d.seedSale.hasRole(DEFAULT_ADMIN_ROLE, d.multisig.address)).to.be.true
             expect(await d.seedSale.hasRole(OPEN_ROLE, d.multisig.address)).to.be.true
             expect(await d.seedSale.hasRole(OPEN_ROLE, d.owner2Addr)).to.be.true
-        })
-
-        it("should not allow to call open before setting new addresses", async () => {
-            expect(await d.seedSale.isOpen()).to.be.false
-            expect(await isEthException(d.seedSale.openNow())).to.be.true
-            expect(await d.seedSale.isOpen()).to.be.false
-        })
-
-        it("should allow us to set addresses", async () => {
-            await awaitTx(d.seedSale.initializeAddresses(d.usdToken.address, d.engaToken.address))
-
-            expect(await d.seedSale.contributionToken()).to.be.eq(d.usdToken.address)
-            expect(await d.seedSale.engaToken()).to.be.eq(d.engaToken.address)
         })
 
         it("should allow us to open the sale", async () => {
