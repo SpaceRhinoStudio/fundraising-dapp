@@ -9,7 +9,7 @@
     "runLocal": "env-cmd npx hardhat run",
     "test": "env-cmd npx hardhat test",
     "typechain": "npx hardhat typechain",
-    "runHardat": "env-cmd -f privateKeyHelper.js npx hardhat run",
+    "runHardhat": "env-cmd -f privateKeyHelper.js npx hardhat run",
     "task": "env-cmd -f privateKeyHelper.js npx hardhat",
     "deployLocal": "yarn runLocal scripts/dep/deployLocal.ts",
     "verifyContracts": " yarn runLocal scripts/tasks/verify.ts",
