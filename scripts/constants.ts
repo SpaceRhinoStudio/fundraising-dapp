@@ -62,19 +62,19 @@ let rate = (price: number, decimals: number = 100) => BigNumber.from(decimals).m
 export const seedSaleConfig = {
     daiGoal: toEth(36_000),
     engaGoal: SEED_SALE_SHARE,
-    cliffPeroid: 6 * months,
-    completePeroid: 12 * months,
-    minimumRequiredToken: toEth(100)
+    cliffPeroid: 2 * hours,
+    completePeroid: 4 * hours,
+    minimumRequiredToken: toEth(10)
 }
 
 export const preSaleConfig = {
     goal: goal(price),
-    peroid: 1 * months,
+    peroid: 12 * hours,
     exchangeRate: rate(price),
-    cliffPeroid: 6 * months,
-    completePeroid: 18 * months,
+    cliffPeroid: 13 * hours,
+    completePeroid: 1 * days,
     beneficiaryPCT: 70 * 10 ** 4, // 70% = 70 * 10 ^ 4, 30% goes into bancor
-    minimumRequiredToken: toEth(1000)
+    minimumRequiredToken: toEth(100)
 }
 
 export const marketMakerConfig = {
