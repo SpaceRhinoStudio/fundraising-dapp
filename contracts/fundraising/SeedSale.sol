@@ -100,7 +100,7 @@ contract SeedSale is TimeHelper, AccessControl, ReentrancyGuard {
         
         require(_daiGoal > 0, ERROR_INVALID_GOAL);
         require(_engaGoal > 0, ERROR_INVALID_GOAL);
-        require(_vestingCliffPeriod >= 1 days, ERROR_INVALID_TIME_PERIOD);
+        require(_vestingCliffPeriod > 0, ERROR_INVALID_TIME_PERIOD);
         require(_vestingCompletePeriod > _vestingCliffPeriod, ERROR_INVALID_TIME_PERIOD);
         require(_minimumRequiredToken != 0, ERROR_INVALID_MINIMUM_REQUIRED_TOKEN);
 
