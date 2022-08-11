@@ -78,5 +78,85 @@
             "blockHash": "0x6e959d14a61868ef6f5d3cfe9340e830ae492795a0febcf96792bd1ea840746a",
             "txHash": "0x5fa63039e1af9c4cf8d5bd3635da91abdb2f623e0790c1b269e82c58026cbc44"
         }
+    },
+    "bscTestnet": {
+        "GnosisSafe": {
+            "address": "0x8251CEC41CbE6498eD766d8993cB075C3030DB75",
+            "blockNumber": 21850597,
+            "blockHash": "0xde8ab222be7a68a090c95ea243e424088e8d30dcbb750097808ba97762805b7b",
+            "txHash": "0xb6c10c1f839ddf99ed0cc9cf780bfe78be007c4b2f28f93c08fef9409c22ee81"
+        },
+        "SeedSale": {
+            "address": "0x1D664eDD95d9b54A4303b1aaB943A48f392fd0f4",
+            "blockNumber": 21851042,
+            "blockHash": "0x82a03c88749f60c62fdd1da3645b2edfbf6e805fa6391b3cc4304c0fcd6e59e7",
+            "txHash": "0xbf1203c8bdbf8e82c1b0493179a8a435f6c7189869621273c23133a64aac50f8"
+        },
+        "StakeHolders": {
+            "address": "0x9a5F2286F3d6B0a3124a1fAF620f67a2eCD5453f",
+            "blockNumber": 21851053,
+            "blockHash": "0x7cc884e61fa6dc34bf4442f23427c47ae4e7a7e7a9a10395c82543b8ac48da97",
+            "txHash": "0x8a1602983d34ad92f45d4b5ce6ab944f5b0eb73d6658a3ef18e93751eb24c1c1"
+        },
+        "Controller": {
+            "address": "0x3B6D75521f54fB479797A4292B63d4198A019f98",
+            "blockNumber": 21851079,
+            "blockHash": "0xf54fb7c3eb415ddf9540cd4901168f8b7ba3dd87bcf9a9d9eb8e57c7e691dfce",
+            "txHash": "0xfd3810f9492fbad22d09dc4e11bb7b56c1829fc5492aa4583b061a99eb843714"
+        },
+        "EngaToken": {
+            "address": "0x67C37a4B3C6030E854D5ad14257Ac1964d40Cc67",
+            "blockNumber": 21851085,
+            "blockHash": "0x556e9b185b455c61e0b8a9c3fbbbf84a473678d34437877d8db2182507525938",
+            "txHash": "0xbb690d5469c94643e1e49021b6ae2871c4422c290ebcbabac35e603cbdebc4bd"
+        },
+        "TokenManager": {
+            "address": "0xac404c92533e25303222bF1831edC69e978AB662",
+            "blockNumber": 21851090,
+            "blockHash": "0xc87445113d159934deb62be58f181b84bc63ae4d507d05c8d56bd27fff687ab0",
+            "txHash": "0x54f09fdbfa4977363f1353fb405293fdd2fb7f4fa128b3112a05a614655cc2dc"
+        },
+        "MarketMaker": {
+            "address": "0x868c0855D3cDFF06226053Db63A5ee5CC94e2917",
+            "blockNumber": 21851095,
+            "blockHash": "0x188bdf3862ea92978c795f0dea36417534ec51f73889a4e0712e688116018e13",
+            "txHash": "0x11fb162defb0e67352640938604c7b7bb98e8a03a1c81b26fb50d4df7653aec5"
+        },
+        "BancorFormula": {
+            "address": "0x21f4C9EA51A8b8E64de252e50505fcA2A91C24dd",
+            "blockNumber": 21851099,
+            "blockHash": "0xa6458d400a6bd1567d399daf95461604c002e879c789d1d27917002a770d5e23",
+            "txHash": "0x0d9a12fe4e7f49821a99be1a48680a8e99fd5e36fe3be0d8360dc42fd6255408"
+        },
+        "Tap": {
+            "address": "0xf8481C2349B0114D037c5BF323dbA4019DB2565e",
+            "blockNumber": 21851104,
+            "blockHash": "0x91d2e55109d3800bbb31d9093663a4c4a5ba4c87aa0828334c778ab26c2d9fff",
+            "txHash": "0x6fbeafe50c6062160299cf73082d11b7cd6e91bc088f31112ac49ce53fd5ff01"
+        },
+        "ReserveVault": {
+            "address": "0xAf54A709C42275f38fD60FB624477129da8c10d4",
+            "blockNumber": 21851108,
+            "blockHash": "0x2acd98a3be3ca93393fec6706f0f6b3559796d5d7cc8e8356b6e24a182910dbb",
+            "txHash": "0x82706e1306d07ec1d1a32faba0df990e904e1c4a7e3291ce4cbad7e33ec11e3d"
+        },
+        "TreasuryVault": {
+            "address": "0xE4f8Cd18A89042B84b56a3c04D6A5282D506A1A2",
+            "blockNumber": 21851113,
+            "blockHash": "0x03a9680a1c2ab22f0a8902ca8c3efe75a875e2528face14677f309a10c7c47d2",
+            "txHash": "0x9d0729c65b0d4c2cb8ce06903fb4fc7118d90515507e6ef51f38fc526c564974"
+        },
+        "KycAuthorization": {
+            "address": "0x7605e90921532b8AF4063562CB35A5a7eB8e66aF",
+            "blockNumber": 21851118,
+            "blockHash": "0xbcff0abec2945c3cfede48ec46e3fa0bd40c9e7ca7c76c636b157ea9c2db543b",
+            "txHash": "0xc43bbda4d912892bb3c1b293e120946d3e5808a9c2b1cfbcd93e31590be2af19"
+        },
+        "PreSale": {
+            "address": "0xCDA67a3119A80623b806C429E5dcD979534536E5",
+            "blockNumber": 21851138,
+            "blockHash": "0xc7f31e3c063b07c4ca4fa48c109369457254b9b811bf191845448bec010a008a",
+            "txHash": "0xf925ef1c00e6251b107b5a3ce8af04a6b6719dfcd74d0f3d527ea1962bdf59be"
+        }
     }
 }

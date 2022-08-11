@@ -7,15 +7,6 @@ let networkName = hre.network.name
 let contracts = allNetworkContracts[networkName]
 let collateral = COLLATERALS[networkName as keyof typeof COLLATERALS]
 
-async function verifyMultisig() {
-    await hre.run("verify:verify", {
-        address: contracts['CoreMultisig'].address,
-        constructorArguments: [
-            OWNER_ADDRSS,
-        ],
-    });
-}
-
 async function verifySeedSale() {
     await hre.run("verify:verify", {
         address: contracts['SeedSale'].address,

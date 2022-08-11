@@ -1,8 +1,8 @@
 import { ethers } from "hardhat";
 import { toEth } from "../utilities";
 import { isNetworkDeployable } from "./_common";
-import hre from "hardhat"
 import { OWNER_ADDRSS } from "../constants";
+import hre from "hardhat"
 
 export async function deploy() {
     let networkName = hre.network.name
@@ -25,16 +25,17 @@ export async function deploy() {
     await usdMock.deployTransaction.wait(5)
     console.log("confirmation is done!")
     let deployedAddr = usdMock.address
-
-    //let usdMock = await ethers.getContractAt("ERC20Mock", "0xA596B5Ad2DfB31f376EB5327ccFb296B5152135c")
+    
+    //let deployedAddr = "0x01Cf32568A9bdcaa6C806E16FaE6D0cb8f052c75"
+    //let usdMock = await ethers.getContractAt("ERC20Mock", deployedAddr)
 
     console.log("Contract deployed at: " + deployedAddr)
 
-    OWNER_ADDRSS.forEach(async (owner) => {
-        console.log(`sending funds to ${owner}`)
-        let tx = await usdMock.transfer(owner, tokenBalance.div(OWNER_ADDRSS.length))
-        await tx.wait(1)
-    });
+    // OWNER_ADDRSS.forEach(async (owner) => {
+    //     console.log(`sending funds to ${owner}`)
+    //     let tx = await usdMock.transfer(owner, tokenBalance.div(OWNER_ADDRSS.length))
+    //     await tx.wait(1)
+    // });
 
     try {
         console.log("waiting for verification...")
