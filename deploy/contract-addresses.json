@@ -158,5 +158,13 @@
             "blockHash": "0xc7f31e3c063b07c4ca4fa48c109369457254b9b811bf191845448bec010a008a",
             "txHash": "0xf925ef1c00e6251b107b5a3ce8af04a6b6719dfcd74d0f3d527ea1962bdf59be"
         }
+    },
+    "polygonMumbai": {
+        "GnosisSafe": {
+            "address": "0xc962A2100AaDb79AcE02FC4308a2061F4e740F5D",
+            "blockNumber": 27570660,
+            "blockHash": "0xf3bac55f7507040f9d35efa94dff289b4b9494c7c69308918cb2af2d67b656c6",
+            "txHash": "0xe85eb98531adb42415d771f4213e4ee34260b8b4057c0e27b9dd2b26c55abaf1"
+        }
     }
 }
