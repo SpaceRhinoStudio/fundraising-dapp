@@ -20,10 +20,12 @@ export async function deployStage1() {
     console.log("GnosisAddress is:  " + gnosisSafe)
 
     let seedSale = await deploySeedSale(gnosisSafe)
+    contracts = getSavedContractAddresses()
 
     if (await isSeedSaleDeployed(contracts, networkName) === false) return
 
     let stakeHolder = await deployStakeHolders(OWNER_ADDRSS, OWNER_SHARES)
+    contracts = getSavedContractAddresses()
 
     console.log("SeedSale has been deployed at: " + seedSale.address)
     console.log("StakeHolder has been deployed at: " + stakeHolder.address)
