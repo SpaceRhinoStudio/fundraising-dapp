@@ -62,25 +62,21 @@ const config: HardhatUserConfig = {
     bscTestnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545",
       chainId: 97,
-      gasPrice: 20000000000,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },
     bsc: {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
-      gasPrice: 20000000000,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },
     polygon: {
       url: "https://polygon-rpc.com/",
       chainId: 137,
-      gasPrice: 20000000000,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },
     polygonMumbai: {
-      url: process.env.MUMBAI_URL || "https://matic-mumbai.chainstacklabs.com",
+      url: process.env.MUMBAI_URL || "https://rpc-mumbai.matic.today",
       chainId: 80001,
-      gasPrice: 20000000000,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
 
