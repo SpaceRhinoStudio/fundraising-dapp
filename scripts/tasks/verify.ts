@@ -120,11 +120,8 @@ async function verifyController() {
 }
 
 if (!(networkName === 'hardhat' || networkName === 'localhost')) {
-    //verifyMultisig().catch(err => { console.log(err) });
-
     verifySeedSale().catch(err => { console.log(err) });
     verifyPreSale().catch(err => { console.log(err) });
-
     verifyEngaToken().catch(err => { console.log(err) });
     verifyTokenManager().catch(err => { console.log(err) });
     verifyVault().catch(err => { console.log(err) });
