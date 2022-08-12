@@ -31,8 +31,8 @@ export function log(o: any) {
     console.log(o)
 }
 
-export async function awaitTx(tx: Promise<ContractTransaction>): Promise<ContractReceipt> {
-    return (await tx).wait()
+export async function awaitTx(tx: Promise<ContractTransaction>, confirmations : number = 0): Promise<ContractReceipt> {
+    return (await tx).wait(confirmations)
 }
 
 export async function isEthException(promise: Promise<any>): Promise<boolean> {
