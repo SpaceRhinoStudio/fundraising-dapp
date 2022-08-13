@@ -75,7 +75,7 @@ const config: HardhatUserConfig = {
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },
     polygonMumbai: {
-      url: process.env.MUMBAI_URL || "https://rpc-mumbai.matic.today",
+      url: process.env.MUMBAI_URL || "https://matic-mumbai.chainstacklabs.com/",
       chainId: 80001,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
