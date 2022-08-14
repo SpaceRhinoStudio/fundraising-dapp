@@ -31,7 +31,9 @@ export function log(o: any) {
     console.log(o)
 }
 
-export async function awaitTx(tx: Promise<ContractTransaction>, confirmations : number = 0): Promise<ContractReceipt> {
+export async function awaitTx(tx: Promise<ContractTransaction>, confirmations: number = 0): Promise<ContractReceipt> {
+    if (confirmations === 0)
+        return (await tx).wait()
     return (await tx).wait(confirmations)
 }
 
