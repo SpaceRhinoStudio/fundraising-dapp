@@ -48,9 +48,9 @@ async function verifyVault() {
     });
 }
 
-async function verifyStakeHolders() {
+async function verifyTeamVault() {
     await hre.run("verify:verify", {
-        address: contracts['StakeHolders'].address,
+        address: contracts['TeamVault'].address,
         constructorArguments: [
             OWNER_ADDRSS,
             OWNER_SHARES
@@ -125,7 +125,7 @@ if (!(networkName === 'hardhat' || networkName === 'localhost')) {
     verifyEngaToken().catch(err => { console.log(err) });
     verifyTokenManager().catch(err => { console.log(err) });
     verifyVault().catch(err => { console.log(err) });
-    verifyStakeHolders().catch(err => { console.log(err) });
+    verifyTeamVault().catch(err => { console.log(err) });
     verifyBancor().catch(err => { console.log(err) });
     verifyMarketMaker().catch(err => { console.log(err) });
     verifyTap().catch(err => { console.log(err) });

@@ -6,7 +6,7 @@ import { awaitTx, calculateSyntheticShare, isEthException, toEth } from "../../s
 import { BATCH_BLOCKS, ControllerState, marketMakerConfig, tapConfig } from "../../scripts/constants"
 import { deployMultisig } from "../../scripts/dep/multisigDeployer"
 import { deploySeedSale } from "../../scripts/dep/seedSaleDeployer"
-import { deployStakeHolders } from "../../scripts/dep/stakeHoldersDeployer"
+import { deployTeamVault } from "../../scripts/dep/teamVaultDeployer"
 import * as d from "../../scripts/dep/sharedLocalDeploy"
 
 describe("controller deployment check", async () => {
@@ -20,7 +20,7 @@ describe("controller deployment check", async () => {
         let multisig = await deployMultisig([d.owner2Addr, d.owner1Addr, d.owner3Addr, d.owner4Addr, d.owner5Addr])
         let seedSale = await deploySeedSale(multisig.address)
 
-        let stakeHolders = await deployStakeHolders([d.owner1Addr, d.owner2Addr, d.owner3Addr, d.owner4Addr], calculateSyntheticShare(4))
+        let teamVault = await deployTeamVault([d.owner1Addr, d.owner2Addr, d.owner3Addr, d.owner4Addr], calculateSyntheticShare(4))
 
         const DEFAULT_ADMIN_ROLE = BYTES32_ZERO
         const ZERO_ADDRESS = ethers.constants.AddressZero
@@ -107,7 +107,7 @@ describe("controller deployment check", async () => {
 
         expect(await isEthException(
             controller.connect(d.owner1).initializeProtocol(
-                stakeHolders.address,
+                teamVault.address,
                 seedSale.address,
                 preSale.address,
                 BATCH_BLOCKS,
@@ -127,7 +127,7 @@ describe("controller deployment check", async () => {
         expect(await kyc.isInitialized()).to.be.true
         expect(await controller.state()).to.be.eq(ControllerState.ContractsDeployed)
         await awaitTx(controller.connect(d.owner2).initializeProtocol(
-            stakeHolders.address,
+            teamVault.address,
             seedSale.address,
             preSale.address,
             BATCH_BLOCKS,
@@ -148,7 +148,7 @@ describe("controller deployment check", async () => {
         expect(await controller.hasRole(TEMP, d.owner2Addr)).to.be.false
 
         expect(await isEthException(controller.connect(d.owner2).initializeProtocol(
-            stakeHolders.address,
+            teamVault.address,
             seedSale.address,
             preSale.address,
             BATCH_BLOCKS,

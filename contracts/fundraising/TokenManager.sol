@@ -16,6 +16,7 @@ import { IEngaToken } from "../interfaces/fundraising/IEngaToken.sol";
 import { IController } from "../interfaces/fundraising/IController.sol";
 import { ITokenManager } from "../interfaces/fundraising/ITokenManager.sol";
 import { IPreSale, SaleState } from "../interfaces/fundraising/IPreSale.sol";
+import { IERC173 } from "../interfaces/access/IERC173.sol";
 import { EngalandBase } from "../common/EngalandBase.sol";
 import { TimeHelper } from "../common/TimeHelper.sol";
 import { Utils } from "../lib/Utils.sol";
@@ -69,11 +70,11 @@ contract TokenManager is ITokenManager, EngalandBase ,ReentrancyGuard, TimeHelpe
 
     /**
     * @notice Initialize Token Manager
-    * @param _stakeHolder   the address of the deployed stakeHolders
+    * @param _team          the address of the team
     * @param _seedSale      the address of the deployed seedSale
     */
     function initialize(
-        address _stakeHolder,
+        address _team,
         address _seedSale
     )
         external
@@ -81,7 +82,7 @@ contract TokenManager is ITokenManager, EngalandBase ,ReentrancyGuard, TimeHelpe
     {
         _initialize();
 
-        Utils.enforceHasContractCode(_stakeHolder, "StakeHolder contract is not deployed");
+        Utils.enforceHasContractCode(_team, "Team contract is not deployed");
         Utils.enforceHasContractCode(_seedSale, "SeedSale contract is not deployed");
 
         IController controller = IController(_msgSender());
@@ -90,6 +91,11 @@ contract TokenManager is ITokenManager, EngalandBase ,ReentrancyGuard, TimeHelpe
 
         // mint 300_000 tokens for the initial sale, inital sale is not revocable and has its own vesting cliff period
         engaToken.mint(_seedSale, 300_000 ether);
+
+        // mint 3_170_000 tokens for the marketing (with no locking) and stake holders (12 until 24 time lock)
+        // 3_000_000 for the stake holders which will be sent to a locked contract for 12 until 24 months
+        // 170_000 for the marketing
+        engaToken.mint(controller.beneficiary(), 3_170_000 ether);
 
         // vest 1,000,000 for dao treasury
         _createVesting(
@@ -102,11 +108,11 @@ contract TokenManager is ITokenManager, EngalandBase ,ReentrancyGuard, TimeHelpe
             false
         );
 
-        // vest 1,700,000 token to the stake holders
+        // vest 1,530,000 token to the stake holders
         _createVesting(
-            _stakeHolder,
+            _team,
             address(0), // by convention, address(0) refers to tokenManager itself and its state doesnt matter because these vestings are not revokable
-            1_700_000 ether,
+            1_530_000 ether,
             getTimeNow(),
             getTimeNow() + 6 * MONTH,
             getTimeNow() + 2 * YEAR,

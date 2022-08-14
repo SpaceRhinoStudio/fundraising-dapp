@@ -26,13 +26,15 @@ export const PCT = toEth(1) // 1 * 10 ** 18
 
 export const BATCH_BLOCKS = BigNumber.from(10)
 
-export const STAKE_HOLDER_SHARE = toEth(1_700_000)
-export const DAO_SHARE = toEth(1_000_000)
 export const SEED_SALE_SHARE = toEth(300_000)
+export const MARKETING = toEth(170_000)
+export const DAO_SHARE = toEth(1_000_000)
+export const TEAM = toEth(1_530_000)
+export const STAKE_HOLDERS = toEth(3_000_000)
 
 export const PRE_SALE = toEth(2_000_000)
 
-export const INITIAL_SHARE_SUPPLY = STAKE_HOLDER_SHARE.add(DAO_SHARE).add(SEED_SALE_SHARE)
+export const INITIAL_SHARE_SUPPLY = SEED_SALE_SHARE.add(MARKETING).add(DAO_SHARE).add(TEAM).add(STAKE_HOLDERS)
 export const INITIAL_SALE_SUPPLY = PRE_SALE
 export const INITIAL_SUPPLY = INITIAL_SHARE_SUPPLY.add(INITIAL_SALE_SUPPLY)
 

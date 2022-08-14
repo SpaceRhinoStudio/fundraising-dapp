@@ -1,5 +1,5 @@
 /**
-* ENGA Federation IStakeHolders.
+* ENGA Federation ITeamSplitterPayment.
 * @author Mehdikovic
 * Date created: 2022.07.25
 * Github: mehdikovic

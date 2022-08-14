@@ -6,7 +6,7 @@ import { calculateSyntheticShare, toEth } from "../utilities"
 import { deployMultisig } from "./multisigDeployer"
 import { deployFundraising } from "./fundraisingDeployer"
 import { deploySeedSale } from "./seedSaleDeployer"
-import { deployStakeHolders } from "./stakeHoldersDeployer"
+import { deployTeamVault } from "./teamVaultDeployer"
 
 export const MAX_UINT256 = ethers.constants.MaxUint256
 export let usdToken: ERC20Mock
@@ -20,7 +20,7 @@ export let bancor: BancorFormula
 export let tap: Tap
 export let treasury: Vault
 export let reserve: Vault
-export let stakeHolders: PaymentSplitter
+export let teamVault: PaymentSplitter
 export let kyc: KycAuthorization
 export let preSale: PreSale
 export let owner1: Signer
@@ -57,9 +57,9 @@ export async function deployContractsForTest() {
 
     multisig = await deployMultisig([owner2Addr, owner1Addr, owner3Addr, owner4Addr, owner5Addr])
     seedSale = await deploySeedSale(multisig.address)
-    stakeHolders = await deployStakeHolders([owner1Addr, owner2Addr, owner3Addr, owner4Addr], calculateSyntheticShare(4))
+    teamVault = await deployTeamVault([owner1Addr, owner2Addr, owner3Addr, owner4Addr], calculateSyntheticShare(4))
 
-    let result = await deployFundraising(multisig.address, stakeHolders.address, seedSale.address, usdToken.address)
+    let result = await deployFundraising(multisig.address, teamVault.address, seedSale.address, usdToken.address)
     controller = result.controller
     preSale = result.preSale
 

@@ -8,7 +8,7 @@ import { deployPreSale } from "./preSaleDeployer";
 import { TEMP } from "../offChainKeccakRoles";
 import hre from "hardhat"
 
-export async function deployFundraising(owner: string, stakeHolder: string, seedSale: string, collateral: string) {
+export async function deployFundraising(owner: string, teamVault: string, seedSale: string, collateral: string) {
     let networkName = hre.network.name
 
     console.log()
@@ -119,7 +119,7 @@ export async function deployFundraising(owner: string, stakeHolder: string, seed
 
     console.log("initializing protocol...")
     await awaitTx(controller.initializeProtocol(
-        stakeHolder,
+        teamVault,
         seedSale,
         preSale.address,
         BATCH_BLOCKS,

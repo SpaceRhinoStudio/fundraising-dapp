@@ -9,7 +9,7 @@
 pragma solidity ^0.8.0;
 
 interface ITokenManager {
-    function initialize(address _stakeHolder,address _seedSale) external;
+    function initialize(address _team,address _seedSale) external;
     function closeVestingProcess() external;
     function mint(address _receiver, uint256 _amount) external;
     function burn(address _burner, uint256 _amount) external;

@@ -11,7 +11,7 @@ async function deployLocal() {
 
     await saveContractInFile(networkName, 'CoreMultisig', d.multisig)
     await saveContractInFile(networkName, 'SeedSale', d.seedSale)
-    await saveContractInFile(networkName, 'StakeHolders', d.stakeHolders)
+    await saveContractInFile(networkName, 'TeamVault', d.teamVault)
     await saveContractInFile(networkName, 'Controller', d.controller)
     await saveContractInFile(networkName, 'EngaToken', d.engaToken)
     await saveContractInFile(networkName, 'TokenManager', d.tokenManager)

@@ -146,7 +146,7 @@ contract Controller is IController, EngalandAccessControl {
 
     /**
     * @notice Initialzie The Protocol
-    * @param _stakeHolders                the address of the deployed stakeHolders
+    * @param _team                        the address of the deployed team
     * @param _seedSale                    the address of the deployed seedSale
     * @param _preSale                     the address of the deployed preSale
     * @param _batchBlocks                 the number of blocks batches are to last
@@ -156,7 +156,7 @@ contract Controller is IController, EngalandAccessControl {
     * @param _maximumTapFloorDecreasePct  the maximum tap floor decrease percentage allowed [in PCT_BASE
     */
     function initializeProtocol(
-        address _stakeHolders,
+        address _team,
         address _seedSale,
         address _preSale,
         uint256 _batchBlocks,
@@ -175,7 +175,7 @@ contract Controller is IController, EngalandAccessControl {
         require(IPreSale(_preSale).getController() == address(this), ERROR_CONTROLLER_MISMATCH);
         require(IPreSale(_preSale).state() == SaleState.Pending, ERROR_SALE_MUST_BE_PENDING);
 
-        ITokenManager(tokenManager).initialize(_stakeHolders, _seedSale);
+        ITokenManager(tokenManager).initialize(_team, _seedSale);
         IMarketMaker(marketMaker).initialize(_batchBlocks, _buyFeePct, _sellFeePct);
         ITap(tap).initialize(_batchBlocks, _maximumTapRateIncreasePct, _maximumTapFloorDecreasePct);
 

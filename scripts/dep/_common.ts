@@ -74,10 +74,10 @@ export async function isSeedSaleDeployed(contracts: any, networkName: string): P
     return res
 }
 
-export async function isStakeHoldersDeployed(contracts: any, networkName: string): Promise<boolean> {
-    let res = await isContractRegisteredAndDeployed(contracts, networkName, 'StakeHolders')
+export async function isTeamVaultDeployed(contracts: any, networkName: string): Promise<boolean> {
+    let res = await isContractRegisteredAndDeployed(contracts, networkName, 'TeamVault')
     if (res === false)
-        console.error("ERROR: StakeHolders is not deployed yet, please call scripts/dep/3_StakeHolders.ts to deploy it")
+        console.error("ERROR: TeamVault is not deployed yet")
     return res
 }
 

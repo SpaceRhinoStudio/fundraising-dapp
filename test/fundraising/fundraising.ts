@@ -4,7 +4,7 @@ import { ethers } from "hardhat"
 import { describe } from "mocha"
 import hre from "hardhat"
 
-import { BATCH_BLOCKS, calculateInitialReserveBalance, calculatePricePPM, DAO_SHARE, days, SEED_SALE_SHARE, FundraisingState, hours, INITIAL_SHARE_SUPPLY, INITIAL_SUPPLY, marketMakerConfig, mmCollateralConfig, months, PCT, PPM, PUBLIC_SALE_PRICE_PPM, seconds, preSaleConfig, PRE_SALE, STAKE_HOLDER_SHARE, tapConfig, seedSaleConfig } from "../../scripts/constants"
+import { BATCH_BLOCKS, calculateInitialReserveBalance, calculatePricePPM, DAO_SHARE, days, SEED_SALE_SHARE, FundraisingState, hours, INITIAL_SHARE_SUPPLY, INITIAL_SUPPLY, marketMakerConfig, mmCollateralConfig, months, PCT, PPM, PUBLIC_SALE_PRICE_PPM, seconds, preSaleConfig, PRE_SALE, TEAM, tapConfig, seedSaleConfig, MARKETING, STAKE_HOLDERS } from "../../scripts/constants"
 import { BYTES32_ZERO, ADD_COLLATERAL_TOKEN_ROLE, BURNER_ROLE, MINTER_ROLE, OPEN_ROLE, RELEASE_ROLE, REVOKE_ROLE, SUSPEND_ROLE, TRANSFER_ROLE, TREASURY_TRANSFER_ROLE, UPDATE_COLLATERAL_TOKEN_ROLE, UPDATE_FEES_ROLE, UPDATE_FORMULA_ROLE, UPDATE_MAXIMUM_TAP_FLOOR_DECREASE_PCT_ROLE, UPDATE_MAXIMUM_TAP_RATE_INCREASE_PCT_ROLE, UPDATE_TAPPED_TOKEN_ROLE, VESTING_ROLE } from "../../scripts/offChainKeccakRoles"
 import { PreSale } from "../../typechain"
 import { awaitTx, calculateSyntheticShare, currentBlockNumber, currentNetworkTime, encodeParams, getTime, getTimeNow, isEthException, isThrownError, log, mineBlock, toEth, waitForSomeTimeNetwork } from "../../scripts/utilities"
@@ -103,7 +103,7 @@ describe("Fundraising", async () => {
             expect(await d.engaToken.totalSupply()).to.be.eq(INITIAL_SHARE_SUPPLY)
 
             expect((await d.tokenManager.getLastVestingForHolder(d.treasury.address)).amountTotal).to.be.eq(DAO_SHARE)
-            expect((await d.tokenManager.getLastVestingForHolder(d.stakeHolders.address)).amountTotal).to.be.eq(STAKE_HOLDER_SHARE)
+            expect((await d.tokenManager.getLastVestingForHolder(d.teamVault.address)).amountTotal).to.be.eq(TEAM)
             expect(await d.engaToken.balanceOf(d.seedSale.address)).to.be.eq(SEED_SALE_SHARE)
         })
 
@@ -112,11 +112,11 @@ describe("Fundraising", async () => {
                 expect(await d.tokenManager.getEngaToken()).to.be.eq(await d.controller.engaToken())
             })
 
-            it("should check the address of core memebrs in StakeHolders", async () => {
-                expect(await d.stakeHolders.payee(0)).to.be.eq(d.owner1Addr)
-                expect(await d.stakeHolders.payee(1)).to.be.eq(d.owner2Addr)
-                expect(await d.stakeHolders.payee(2)).to.be.eq(d.owner3Addr)
-                expect(await d.stakeHolders.payee(3)).to.be.eq(d.owner4Addr)
+            it("should check the address of core memebrs in TeamVault", async () => {
+                expect(await d.teamVault.payee(0)).to.be.eq(d.owner1Addr)
+                expect(await d.teamVault.payee(1)).to.be.eq(d.owner2Addr)
+                expect(await d.teamVault.payee(2)).to.be.eq(d.owner3Addr)
+                expect(await d.teamVault.payee(3)).to.be.eq(d.owner4Addr)
             })
 
             it("should check addresses passed to tap", async () => {
@@ -447,6 +447,7 @@ describe("Fundraising", async () => {
 
             it("should check the supply", async () => {
                 expect(await d.engaToken.totalSupply()).to.be.eq(INITIAL_SHARE_SUPPLY)
+                expect(await d.engaToken.balanceOf(d.multisig.address)).to.be.eq(MARKETING.add(STAKE_HOLDERS))
             })
 
             it("should check investors' addresses to have enough balance of mock usd after Refund", async () => {
@@ -678,7 +679,9 @@ describe("Fundraising", async () => {
 
             it("should check for the total minted token", async () => {
                 expect(await d.engaToken.totalSupply()).to.be.eq(
-                    (await d.tokenManager.vestingsTotalAmount()).add(await d.engaToken.balanceOf(d.seedSale.address))
+                    (await d.tokenManager.vestingsTotalAmount())
+                        .add(await d.engaToken.balanceOf(d.seedSale.address))
+                        .add(await d.engaToken.balanceOf(d.multisig.address))
                 )
             })
 
@@ -822,12 +825,12 @@ describe("Fundraising", async () => {
             })
 
             it("should not allow anyone to call update beneficiary on tap", async () => {
-                expect(await isEthException(d.tap.connect(d.intruder).updateBeneficiary(d.stakeHolders.address))).to.be.true
-                expect(await isEthException(d.tap.connect(d.owner2).updateBeneficiary(d.stakeHolders.address))).to.be.true
-                expect(await isEthException(d.tap.connect(d.owner1).updateBeneficiary(d.stakeHolders.address))).to.be.true
-                expect(await isEthException(d.tap.connect(d.investor1).updateBeneficiary(d.stakeHolders.address))).to.be.true
+                expect(await isEthException(d.tap.connect(d.intruder).updateBeneficiary(d.teamVault.address))).to.be.true
+                expect(await isEthException(d.tap.connect(d.owner2).updateBeneficiary(d.teamVault.address))).to.be.true
+                expect(await isEthException(d.tap.connect(d.owner1).updateBeneficiary(d.teamVault.address))).to.be.true
+                expect(await isEthException(d.tap.connect(d.investor1).updateBeneficiary(d.teamVault.address))).to.be.true
 
-                let { id } = await multisigCall(d.tap.address, 'updateBeneficiary(address)', encodeParams(['address'], [d.stakeHolders.address]))
+                let { id } = await multisigCall(d.tap.address, 'updateBeneficiary(address)', encodeParams(['address'], [d.teamVault.address]))
                 expect((await d.multisig.transactions(id)).executed).to.be.false
             })
 
@@ -2132,7 +2135,7 @@ describe("Fundraising", async () => {
             })
 
             it("should release stake holder vault completely", async () => {
-                let _beneficiary = d.stakeHolders.address
+                let _beneficiary = d.teamVault.address
 
                 let id = await d.tokenManager.computeId(_beneficiary, 0)
                 let lastEndTime = (await d.tokenManager.getVesting(id)).end
@@ -2213,7 +2216,7 @@ describe("Fundraising", async () => {
             })
         })
 
-        describe("StakeHolders Payment splitting", async () => {
+        describe("TeamVault Payment splitting", async () => {
             it("should distribute tokens to the stake holders", async () => {
                 let token = d.engaToken.address
 
@@ -2222,27 +2225,27 @@ describe("Fundraising", async () => {
                 let owner3BalBefore = await d.engaToken.balanceOf(d.owner3Addr)
                 let owner4BalBefore = await d.engaToken.balanceOf(d.owner4Addr)
 
-                let stakeHolderBal = await d.engaToken.balanceOf(d.stakeHolders.address)
+                let teamVaultBal = await d.engaToken.balanceOf(d.teamVault.address)
 
                 let ownerShares = calculateSyntheticShare(4)
                 let totalShares = ownerShares.reduce((a, b) => a + b, 0)
 
-                let owner1BalanaceOfShare = stakeHolderBal.mul(ownerShares[0]).div(totalShares)
-                let owner2BalanaceOfShare = stakeHolderBal.mul(ownerShares[1]).div(totalShares)
-                let owner3BalanaceOfShare = stakeHolderBal.mul(ownerShares[2]).div(totalShares)
-                let owner4BalanaceOfShare = stakeHolderBal.mul(ownerShares[3]).div(totalShares)
+                let owner1BalanaceOfShare = teamVaultBal.mul(ownerShares[0]).div(totalShares)
+                let owner2BalanaceOfShare = teamVaultBal.mul(ownerShares[1]).div(totalShares)
+                let owner3BalanaceOfShare = teamVaultBal.mul(ownerShares[2]).div(totalShares)
+                let owner4BalanaceOfShare = teamVaultBal.mul(ownerShares[3]).div(totalShares)
 
-                expect(await d.stakeHolders.shares(d.owner1Addr)).to.be.eq(ownerShares[0])
-                expect(await d.stakeHolders.shares(d.owner2Addr)).to.be.eq(ownerShares[1])
-                expect(await d.stakeHolders.shares(d.owner3Addr)).to.be.eq(ownerShares[2])
-                expect(await d.stakeHolders.shares(d.owner4Addr)).to.be.eq(ownerShares[3])
+                expect(await d.teamVault.shares(d.owner1Addr)).to.be.eq(ownerShares[0])
+                expect(await d.teamVault.shares(d.owner2Addr)).to.be.eq(ownerShares[1])
+                expect(await d.teamVault.shares(d.owner3Addr)).to.be.eq(ownerShares[2])
+                expect(await d.teamVault.shares(d.owner4Addr)).to.be.eq(ownerShares[3])
 
-                expect(await d.stakeHolders.totalShares()).to.be.eq(totalShares)
+                expect(await d.teamVault.totalShares()).to.be.eq(totalShares)
 
-                await awaitTx(d.stakeHolders["release(address,address)"](token, d.owner1Addr))
-                await awaitTx(d.stakeHolders["release(address,address)"](token, d.owner2Addr))
-                await awaitTx(d.stakeHolders["release(address,address)"](token, d.owner3Addr))
-                await awaitTx(d.stakeHolders["release(address,address)"](token, d.owner4Addr))
+                await awaitTx(d.teamVault["release(address,address)"](token, d.owner1Addr))
+                await awaitTx(d.teamVault["release(address,address)"](token, d.owner2Addr))
+                await awaitTx(d.teamVault["release(address,address)"](token, d.owner3Addr))
+                await awaitTx(d.teamVault["release(address,address)"](token, d.owner4Addr))
 
                 expect(await d.engaToken.balanceOf(d.owner1Addr)).to.be.eq(owner1BalBefore.add(owner1BalanaceOfShare))
                 expect(await d.engaToken.balanceOf(d.owner2Addr)).to.be.eq(owner2BalBefore.add(owner2BalanaceOfShare))
