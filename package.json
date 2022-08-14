@@ -13,7 +13,7 @@
     "task": "env-cmd -f privateKeyHelper.js npx hardhat",
     "deployLocal": "yarn runLocal scripts/dep/deployLocal.ts",
     "verifyContracts": " yarn runLocal scripts/tasks/verify.ts",
-    "deploy": "yarn runHardat",
+    "deploy": "yarn runHardhat",
     "tmultisig": "yarn test test/multisig/multisig.ts",
     "taccess": "yarn test test/access/engalandAccessControl.ts",
     "tfundraising": "yarn test test/fundraising/fundraising.ts",
