@@ -19,6 +19,7 @@ import { ITap } from "../interfaces/fundraising/ITap.sol";
 import { IVaultERC20 } from "../interfaces/finance/IVaultERC20.sol";
 import { IKycAuthorization } from "../interfaces/access/IKycAuthorization.sol";
 import { IPreSale, SaleState } from "../interfaces/fundraising/IPreSale.sol";
+import { IPaymentSplitter } from "../interfaces/finance/IPaymentSplitter.sol";
 
 import { EngalandAccessControl } from "../access/EngalandAccessControl.sol";
 import { Utils } from "../lib/Utils.sol";
@@ -356,6 +357,22 @@ contract Controller is IController, EngalandAccessControl {
         bool hasReleaseRole = hasRole(RELEASE_ROLE, _msgSender());
         
         require(isBeneficiary || hasReleaseRole || isMultisig, ERROR_RELEASE_ACCESS_DENIED);
+        ITokenManager(tokenManager).release(vestingId);
+    }
+
+    /**
+    * @notice for the time that vesting is a payment splitter that is created in token manager's constructor
+    * @param vestingId  the id of the vesting created in token manager
+    */
+    function releaseVaultOfBeneficiary(bytes32 vestingId) external onlyOpenProtocol {
+        bool isMultisig = _msgSender() == owner;
+        bool hasReleaseRole = hasRole(RELEASE_ROLE, _msgSender());
+        address vault = ITokenManager(tokenManager).getVestingOwner(vestingId);
+        require(vault != _msgSender());
+        
+        bool isMemberOfVault = IPaymentSplitter(vault).shares(_msgSender()) > 0;
+        require(isMemberOfVault || hasReleaseRole || isMultisig, ERROR_RELEASE_ACCESS_DENIED);
+
         ITokenManager(tokenManager).release(vestingId);
     }
     

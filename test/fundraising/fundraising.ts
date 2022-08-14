@@ -2147,7 +2147,9 @@ describe("Fundraising", async () => {
 
                 expect(beforeRelease).to.be.eq(0)
 
-                expect(await release(id)).to.be.true
+                //expect(await release(id)).to.be.true
+                expect(await isEthException(d.controller.connect(d.investor1).releaseVaultOfBeneficiary(id)))
+                await awaitTx(d.controller.connect(d.owner2).releaseVaultOfBeneficiary(id))
 
                 let vest = await d.tokenManager.getVesting(id)
                 let released = (await d.tokenManager.getVesting(id)).released
