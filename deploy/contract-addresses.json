@@ -390,10 +390,10 @@
             "txHash": "0x6161613ef861096bea5887214a7adf62ab123d2999ac45804b42c99d3d44b257"
         },
         "PreSale": {
-            "address": "0xd79643eF39B17380c8092e4a5086861F94ed4331",
-            "blockNumber": 31886452,
-            "blockHash": "0xda87801ea056ef858214ba071a746f2f6e03f499f979858ebed38213d5d16bdf",
-            "txHash": "0x96ddb35bf65b8affacd2b239f621afeb65b0c77eab9243b7cc55d964c4259207"
+            "address": "0xdF7004a3fE2C45682814e17a064d55F81Dbd1FDe",
+            "blockNumber": 31912269,
+            "blockHash": "0x647f392edf86ce93638ebf3558f5a49da776d61f680bbdb6b0dc463b07ca3924",
+            "txHash": "0xd012ac554fd8e0ed2458f441b7ec65a5e3cb945f2b70a2b17c87195a6a9b0975"
         }
     }
 }
