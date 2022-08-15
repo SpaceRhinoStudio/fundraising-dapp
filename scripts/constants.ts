@@ -76,7 +76,7 @@ export const preSaleConfig = {
     cliffPeroid: 6 * months,
     completePeroid: 18 * months,
     beneficiaryPCT: 70 * 10 ** 4, // 70% = 70 * 10 ^ 4, 30% goes into bancor
-    minimumRequiredToken: toEth(1000)
+    minimumRequiredToken: toEth(10)
 }
 
 export const marketMakerConfig = {
